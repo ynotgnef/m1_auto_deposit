@@ -27,6 +27,8 @@ pipeline {
           withCredentials([file(credentialsId: 'gsheets', variable: 'gsheets')]) {
             withCredentials([usernamePassword(credentialsId: 'm1', passwordVariable: 'M1_PASSWORD', usernameVariable: 'M1_USERNAME')]) {
               sh '''#!/bin/bash -l
+                sudo cp $gsheets ./credentials.json
+                sudo chmod 777 ./credentials.json
                 bundle exec ruby auto_deposit.rb
               '''
             }

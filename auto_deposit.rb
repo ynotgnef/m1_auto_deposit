@@ -11,8 +11,7 @@ title = config['title']
 creds = M1API.read_credentials
 m1 = M1API.new(*creds.values)
 m1.query_accounts
-
-session = GoogleDrive::Session.from_config('credentials.json')
+session = GoogleDrive::Session.from_service_account_key('credentials.json')
 sheet = session.spreadsheet_by_key(spreadsheet_id).worksheet_by_title(title)
 
 if ENV['LIVE_TRANSFER']

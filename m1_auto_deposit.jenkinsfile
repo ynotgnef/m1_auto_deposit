@@ -1,0 +1,46 @@
+pipeline {
+  agent { label 'medium' }
+
+  parameters {
+    string(name: 'GIT_BRANCH', defaultValue: 'master', description: '', trim: false)
+    booleanParam(defaultValue: true, description: '', name: 'LIVE_TRANSFER')
+    booleanParam(defaultValue: true, description: '', name: 'LIVE_OUTPUT')
+  }
+
+  stages {
+    stage('setup') {
+      steps {
+        checkout([
+          $class: 'GitSCM',
+          branches: [[name: "${params.GIT_BRANCH}"]],
+          userRemoteConfigs: [[
+            credentialsId: 'github',
+            url: 'https://github.com/ynotgnef/m1_auto_deposit.git'
+          ]]
+        ])
+        ruby()
+      }
+    }
+    stage('transfer') {
+      steps {
+        withEnv(['LIVE_TRANSFER="${params.LIVE_TRANSFER}"', 'LIVE_OUTPUT="${params.LIVE_OUTPUT}"']) {
+          withCredentials([file(credentialsId: 'gsheets', variable: 'gsheets')]) {
+            sh '''#!/bin/bash -l
+              bundle exec ruby auto_deposit.rb
+            '''
+          }
+        }
+      }
+    }
+  }
+}
+
+def ruby() {
+  sh '''#!/bin/bash -l
+    rvm install 2.5.2
+    rvm use 2.5.2
+    rm Gemfile.lock || true
+    gem install bundler
+    bundle install
+  '''
+}

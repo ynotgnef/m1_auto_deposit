@@ -1,0 +1,24 @@
+spreadsheet_id: 1RbzPeJ-YH3PJ0i1qxhc-OLXLKccGaF9OZJSw2a4hNvg
+title: m1_transfers
+
+accounts:
+  individual_1:
+    target_account: Individual - 986
+    index: spy
+    base_deposit: 75
+    period: 1m
+    performance_multiplier: -1
+
+  roth_1:
+    target_account: Roth IRA - 876
+    index: spy
+    base_deposit: 75
+    period: 1m
+    performance_multiplier: -1
+
+  traditional_1:
+    target_account: Traditional IRA - 874
+    index: spy
+    base_deposit: 75
+    period: 1m
+    performance_multiplier: -1
